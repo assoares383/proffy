@@ -1,41 +1,56 @@
 import React from "react";
-import { FaUserCircle } from "react-icons/fa";
 
 import whatsappIcon from "../../assets/images/icons/whatsapp.svg";
+import api from "../../services/api";
 
 import "./styles.css";
 
-function TeachetItem() {
+export interface Teacher {
+  id: number;
+  avatar: string;
+  bio: string;
+  cost: number;
+  name: string;
+  subject: string;
+  whatassp: string;
+}
+interface TeacherItemProps {
+  teacher: Teacher;
+}
+
+const TeachetItem: React.FC<TeacherItemProps> = ({ teacher }) => {
+  function createNewConnection() {
+    api.post("connections", {
+      user_id: teacher.id,
+    });
+  }
+
   return (
     <article className="teacher-item">
       <header>
-        <FaUserCircle />
+        <img src={teacher.avatar} alt={teacher.name} />
         <div>
-          <strong>Lorem Ipsum</strong>
-          <span>Mathematics</span>
+          <strong>{teacher.name}</strong>
+          <span>{teacher.subject}</span>
         </div>
       </header>
 
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-        facilisis fermentum odio, sed vestibulum est posuere in.
-        <br />
-        <br />
-        Integer diam ante, cursus sit amet lorem eget, luctus bibendum purus.
-        Nulla dui nisl, aliquet a maximus vel, rutrum venenatis orci. Nunc et
-        bibendum urna.
-      </p>
+      <p>{teacher.bio}</p>
 
       <footer>
         <p>
-          Preço/hora <strong>70,00</strong>
+          Preço/hora <strong>{teacher.cost}</strong>
         </p>
-        <button type="button">
+        <a
+          target="_blank"
+          href={`https://wa.me/${teacher.whatassp}`}
+          onClick={createNewConnection}
+        >
           <img src={whatsappIcon} alt="Whatsapp" /> Entrar em contato
-        </button>
+        </a>
       </footer>
     </article>
   );
-}
+};
 
 export default TeachetItem;
